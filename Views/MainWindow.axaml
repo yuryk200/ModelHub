@@ -1,0 +1,254 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ModelHub.ViewModels"
+        xmlns:controls="using:ModelHub.Controls"
+        x:Class="ModelHub.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        x:Name="Root"
+        Width="1100"
+        Height="750"
+        Title="ModelHub">
+
+
+    <Window.Styles>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="#D9D9D9" />
+        </Style>
+
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#EAEAEA" />
+        </Style>
+
+        <Style Selector="ListBoxItem:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#CCCCCC" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="16" RowSpacing="12">
+
+        <!-- Top connection area -->
+        <Border Grid.Row="0" Padding="12" CornerRadius="8" BorderBrush="Gray" BorderThickness="1">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="LM Studio URL:" />
+
+                <TextBox Grid.Column="1"
+                         Text="{Binding BaseUrl}" />
+
+                <Button Grid.Column="2"
+                        Content="Test Connection"
+                        Command="{Binding TestConnectionCommand}" />
+            </Grid>
+        </Border>
+
+        <!-- Main content -->
+        <Grid Grid.Row="1" ColumnDefinitions="280,*,320" ColumnSpacing="12">
+
+            <!-- Models panel -->
+            <Border Grid.Column="0" Padding="12" CornerRadius="8" BorderBrush="Gray" BorderThickness="1">
+                <Grid RowDefinitions="Auto,*" RowSpacing="10">
+                    <TextBlock Grid.Row="0"
+                               Text="Models"
+                               FontSize="22"
+                               FontWeight="Bold" />
+
+                    <ListBox Grid.Row="1"
+                            ItemsSource="{Binding Models}"
+                            SelectedItem="{Binding SelectedModel}"
+                            BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="10"
+                                        Margin="0,0,0,8"
+                                        CornerRadius="8"
+                                        BorderBrush="Gray"
+                                        BorderThickness="1">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto"
+                                        RowDefinitions="Auto,Auto,Auto"
+                                        ColumnSpacing="8">
+
+                                        <!-- Loaded/ejected status dot -->
+                                        <Ellipse Grid.Row="0"
+                                                Grid.Column="0"
+                                                Width="10"
+                                                Height="10"
+                                                Fill="Red"
+                                                IsVisible="{Binding IsNotLoaded}" />
+
+                                        <Ellipse Grid.Row="0"
+                                                Grid.Column="0"
+                                                Width="10"
+                                                Height="10"
+                                                Fill="LimeGreen"
+                                                IsVisible="{Binding IsLoaded}" />
+
+                                        <!-- Model name -->
+                                        <TextBlock Grid.Row="0"
+                                                Grid.Column="1"
+                                                Text="{Binding Id}"
+                                                FontWeight="Bold"
+                                                TextWrapping="Wrap" />
+
+                                        <!-- Loading spinner -->
+                                        <controls:LoadingSpinner Grid.Row="0"
+                                                                Grid.Column="2"
+                                                                Width="22"
+                                                                Height="22"
+                                                                IsVisible="{Binding IsRunning}" />
+
+                                        <Button Grid.Row="0"
+                                                Grid.Column="3"
+                                                Content="Load"
+                                                Command="{Binding #Root.DataContext.LoadModelCommand}"
+                                                CommandParameter="{Binding}"
+                                                IsVisible="{Binding IsNotLoaded}" />
+
+                                        <Button Grid.Row="0"
+                                                Grid.Column="4"
+                                                Content="X"
+                                                Command="{Binding #Root.DataContext.EjectModelCommand}"
+                                                CommandParameter="{Binding}"
+                                                IsVisible="{Binding IsLoaded}" />
+
+                                        <TextBlock Grid.Row="1"
+                                                Grid.Column="1"
+                                                Grid.ColumnSpan="4"
+                                                Text="{Binding LastStatus}"
+                                                FontSize="12"
+                                                Opacity="0.75" />
+
+                                        <TextBlock Grid.Row="2"
+                                                Grid.Column="1"
+                                                Grid.ColumnSpan="4"
+                                                Text="{Binding LastElapsedMilliseconds, StringFormat='Last run: {0} ms'}"
+                                                FontSize="12"
+                                                Opacity="0.75" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- Prompt and response -->
+            <Border Grid.Column="1" Padding="12" CornerRadius="8" BorderBrush="Gray" BorderThickness="1">
+                <Grid RowDefinitions="Auto,120,Auto,Auto,*" RowSpacing="8">
+
+                    <TextBlock Grid.Row="0"
+                            Text="Prompt Lab"
+                            FontSize="18"
+                            FontWeight="Bold" />
+
+                    <TextBox Grid.Row="1"
+                            Text="{Binding Prompt}"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            Watermark="Type your prompt here. If a dataset is selected, this prompt will be applied to each house." />
+
+                    <!-- Dataset selector, treated like an attachment/input for Run Prompt -->
+                    <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="8">
+                        <TextBlock Grid.Column="0"
+                                   Text="Dataset:"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold" />
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding DatasetDisplayText}"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Opacity="0.8" />
+
+                        <TextBlock Grid.Column="2"
+                                   Text="Views:"
+                                   VerticalAlignment="Center" />
+
+                        <TextBox Grid.Column="3"
+                                 Width="55"
+                                 Text="{Binding MaxImagesPerHouse}" />
+
+                        <Button Grid.Column="4"
+                                Content="Browse Dataset"
+                                Click="BrowseDataset_Click" />
+                    </Grid>
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="8">
+                        <Button Content="Run Prompt"
+                                Command="{Binding RunPromptCommand}" />
+                    </StackPanel>
+
+                    <Border Grid.Row="4"
+                            Padding="8"
+                            CornerRadius="8"
+                            BorderBrush="Gray"
+                            BorderThickness="1">
+                        <Grid RowDefinitions="Auto,*" RowSpacing="8">
+                            <TextBlock Grid.Row="0"
+                                    Text="{Binding PromptResponseTitle}"
+                                    FontSize="16"
+                                    FontWeight="Bold" />
+
+                            <ScrollViewer Grid.Row="1"
+                                        VerticalScrollBarVisibility="Auto"
+                                        HorizontalScrollBarVisibility="Disabled">
+                                <ItemsControl ItemsSource="{Binding ComparisonResults}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10"
+                                                    Margin="0,0,0,10"
+                                                    BorderBrush="Gray"
+                                                    BorderThickness="1"
+                                                    CornerRadius="6">
+                                                <StackPanel Spacing="6">
+                                                    <TextBlock Text="{Binding ModelId}"
+                                                            FontWeight="Bold"
+                                                            FontSize="14"
+                                                            TextWrapping="Wrap" />
+
+                                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                                        <TextBlock Text="{Binding ElapsedMilliseconds, StringFormat='Time: {0} ms'}"
+                                                                FontSize="12"
+                                                                Opacity="0.75" />
+
+                                                        <TextBlock Text="{Binding Success, StringFormat='Success: {0}'}"
+                                                                FontSize="12"
+                                                                Opacity="0.75" />
+                                                    </StackPanel>
+
+                                                    <TextBlock Text="{Binding FullResponse}"
+                                                            TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Logs -->
+            <Border Grid.Column="2" Padding="12" CornerRadius="8" BorderBrush="Gray" BorderThickness="1">
+                <Grid RowDefinitions="Auto,*" RowSpacing="8">
+                    <TextBlock Grid.Row="0" Text="Logs" FontSize="18" FontWeight="Bold" />
+
+                    <ListBox Grid.Row="1" ItemsSource="{Binding Logs}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Status bar -->
+        <Border Grid.Row="2" Padding="8" CornerRadius="8" BorderBrush="Gray" BorderThickness="1">
+            <TextBlock Text="{Binding StatusMessage}" />
+        </Border>
+
+    </Grid>
+</Window>
