@@ -24,10 +24,10 @@ It's built with **C#**, **.NET** and **Avalonia UI**. The focus is on being a us
 ## 📋 What It Does
 
 - **Manage local models** — See which models are available, load or unload them and check their status.
-- **Run prompts** — Enter a prompt and view the response directly in the app.
+- **Run prompts** — Send a prompt to a loaded model and read its response in the app, without having to make API requests manually.
 - **Compare models** — Send the same prompt to multiple loaded models and look at their responses and response times.
 - **Keep track of activity** — Use the logs to follow connections, model changes, requests and errors.
-- **Work with image datasets** — Run prompts across folders of images with a compatible vision-language model and save the output as JSON.
+- **Work with image datasets** — Select a folder of images, apply a prompt with a compatible vision-language model and save the results as JSON.
 
 The image workflow is optional. ModelHub can be used just for loading models, trying prompts and comparing results.
 
@@ -44,6 +44,12 @@ The app has three main panels:
 - **Logs** shows what the app is doing, including connection messages and model activity.
 
 The URL field at the top connects ModelHub to the local LM Studio server.
+
+## 🔄 Using ModelHub
+
+In a normal session, I start the server in LM Studio and connect through the URL field. ModelHub then shows the available models and whether they are loaded. I can load one, write a prompt in **Prompt Lab** and see the response without switching to a terminal or another application. When testing different models, I use the same prompt to compare how they respond, with the **Logs** panel showing model and request activity.
+
+For image-based tasks, I can choose a dataset folder with **Browse Dataset** and set the number of views. With a compatible vision-language model, ModelHub applies the prompt to the images and saves the generated descriptions as JSON. This is an additional workflow built on the same model-management and prompting features.
 
 ## 🛠️ Built With
 
