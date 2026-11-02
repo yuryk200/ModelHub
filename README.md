@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/modelhub-banner.png" alt="ModelHub — Local AI Model Management" width="100%" />
+  <img src="docs/assets/modelhhub.png" alt="ModelHub — Local AI Model Management" width="100%" />
 </p>
 
 <p align="center">
@@ -39,7 +39,6 @@ The aim is to make local model experimentation easier to manage: connect to a ru
 - **Prompt Lab:** Run text prompts against a loaded local model.
 - **Multi-model comparison:** When multiple models are loaded, run the same prompt against each and view their responses and execution times together.
 - **Vision dataset captioning:** Apply one prompt to multiple image views per house using a compatible vision-language model.
-- **Execution feedback:** Loading spinners, status messages and an in-app activity log for successful operations and errors.
 
 ## 📖 Table of Contents
 
