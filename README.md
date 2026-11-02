@@ -119,8 +119,6 @@ These file-processing features are an **extension of the general prompting workf
 
 The application is divided into three main areas: **Models** on the left, **Prompt Lab** in the centre and **Logs** on the right. The connection controls sit above these panels, while the status bar shows the current operation.
 
-> The top banner is a conceptual illustration; the image above is a screenshot of the desktop application.
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -151,11 +149,7 @@ dotnet build ModelHub.csproj -c Release
 
 ### 3. Connect to LM Studio
 
-Enable the local API server inside LM Studio, or use the `lms` CLI if it is available:
-
-```bash
-lms server start
-```
+Enable the local API server inside LM Studio, or use the `lms` CLI if it is available
 
 The default server URL in ModelHub is:
 
@@ -172,7 +166,6 @@ Enter a different URL if your server uses a different host or port, then click *
 3. Select **Run Prompt**.
 4. Review the response, timing and log entries.
 
-> Inference speed and supported input types depend on the selected model and the resources available on your machine.
 
 ## 🖧 LM Studio Integration
 
@@ -260,12 +253,5 @@ ModelHub/
 - The comparison feature displays responses and elapsed time; it does not calculate independently verified model-quality scores.
 - The application is a development-stage desktop project; this README does not include a packaged installer or video walkthrough.
 
-## 💡 Why I Built ModelHub and How I Use It
-
-ModelHub originally began as a **practical C#/.NET desktop engineering-tools project** while I was preparing for a software engineering interview. I wanted to build something I could demonstrate and use, combining desktop application development with my background in artificial intelligence rather than creating a purely illustrative example.
-
-I started by connecting an **Avalonia UI** application to **LM Studio**, so I could discover locally available models, control what was loaded and send prompts through a simple interface. From there, I expanded the application to support **comparing responses from multiple loaded models** and monitoring operations through logs and status updates. That made it more useful as a general-purpose tool for experimenting with local AI systems.
-
-I later used it in my **PhD research into AI-driven residential building design**. One use case involved testing vision-language models on datasets containing several images of each house. Instead of sending each image manually, I added a workflow that could run a prompt across image folders and save the descriptions back into structured JSON metadata.
 
 That research-specific functionality helped shape ModelHub, but **it is not what defines the application**. ModelHub is a reusable workspace for working with different locally hosted models, with dataset processing as one example of how its capabilities can be applied to a real project.
