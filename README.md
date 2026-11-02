@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/modelhhub.png" alt="ModelHub — Local AI Model Management" width="100%" />
+  <img src="docs/assets/modelhub.png" alt="ModelHub — Local AI Model Management" width="100%" />
 </p>
 
 <p align="center">
